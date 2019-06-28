@@ -41,7 +41,7 @@ export default class EditNote extends Component {
         </View>
 
         <View style={styles.bottom}>
-          <Text style={{fontSize: 16, color: 'black'}}>CATEGORY</Text>
+          <Text style={{fontSize: 16, color: 'black', fontWeight: 'bold'}}>CATEGORY</Text>
           <Picker style={{width: '50%', marginLeft: 20, elevation: 10}}>
             <Picker.Item label="Work" value="key0" />
             <Picker.Item label="Personal" value="key1" />

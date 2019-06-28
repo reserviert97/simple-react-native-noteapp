@@ -1,6 +1,6 @@
 # Simple React Native Note App
 
-this is 
+this is a simple note app made with react native
 
 ## Getting Started
 
