@@ -50,15 +50,15 @@ export default class AddNote extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingRight: 15,
+    paddingLeft: 15
   },
   textInput: {
     flex: 1,
-    padding: 15
   },
   description: {
     flex: 5,
     backgroundColor: 'white',
-    padding: 15
   },
   bottom: {
     flex: 3,

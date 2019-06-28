@@ -42,22 +42,27 @@ export default class customDrawer extends Component{
             transparent={true}
             visible={this.state.modalVisible}
             onRequestClose={() => { this.setModalVisible(!this.state.modalVisible) }}>
-            <TouchableOpacity activeOpacity={0.9} style={{width: '100%', height: '100%'}} onPress={() => this.setModalVisible(!this.state.modalVisible) }>
-                <View style={{position: 'absolute', top: 250, right: 75, left: 75, bottom: 250, backgroundColor: 'white', elevation: 20, width: 200, height: 142, padding: 15, zIndex: 9 }}>
-                  <View>
-                    <TextInput placeholder="Category Name"/>
-                    <TextInput placeholder="Image Url"/>
-                  </View>
-                  <View style={{flexDirection: 'row',}}>
-                    <View style={{flex: 2}}></View>
-                    <Text style={{fontSize: 14, flex: 1}}>Add</Text>
-                    <Text style={{fontSize: 14, flex: 1}}>Cancel</Text>
-                  </View>
-                  
-                </View>
-            </TouchableOpacity>
+              <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0, 0.8)'}}>
+                <TouchableOpacity
+                  activeOpacity={0.9} 
+                  style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0}} 
+                  onPress={() => this.setModalVisible(!this.state.modalVisible) }>
+                </TouchableOpacity>
+                    <View style={{backgroundColor: 'white', elevation: 20, width: '60%', height: 170, padding: 15}}>
+                      <View>
+                        <TextInput placeholder="Category Name" style={{borderBottomWidth: 1, borderBottomColor: '#2ED1A2'}}/>
+                        <TextInput placeholder="Image Url" style={{borderBottomWidth: 1, borderBottomColor: '#2ED1A2'}}/>
+                      </View>
+                      <View style={{flexDirection: 'row', marginTop: 15}}>
+                        <View style={{flex: 2}}></View>
+                        <Text style={{fontSize: 14, flex: 1}}>Add</Text>
+                        <TouchableOpacity onPress={() => this.setModalVisible(!this.state.modalVisible)}>
+                          <Text style={{fontSize: 14, flex: 1}}>Cancel</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+              </View>
           </Modal>
-          
         </View>
       </ScrollView>
     )

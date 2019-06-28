@@ -4,6 +4,11 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default class EditNote extends Component {
 
+  state = {
+    title: this.props.navigation.state.params.item.name,
+    description: this.props.navigation.state.params.item.content
+  }
+
   static navigationOptions = ({navigation}) => {
     return {
       headerTitle: 'Edit Note',
@@ -20,16 +25,18 @@ export default class EditNote extends Component {
       <View style={styles.container}>
         <View style={styles.textInput}>
           <TextInput
-            style={{fontSize: 20, color: '#C4C4C4'}}
-            placeholder="ADD TITLE"
+            style={{fontSize: 20, color: 'black'}}
+            value={this.state.title}
             multiline={true}
+            onChangeText={(text) => this.setState({title: text})}
           />
         </View>
         <View style={styles.description}>
           <TextInput
-            style={{fontSize: 20, color: '#C4C4C4'}}
+            style={{fontSize: 20, color: 'black'}}
             multiline={true}
-            placeholder="description"
+            value={this.state.description}
+            onChangeText={(text) => this.setState({description: text})}
           />
         </View>
 
@@ -46,19 +53,18 @@ export default class EditNote extends Component {
   }
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingRight: 15,
+    paddingLeft: 15
   },
   textInput: {
     flex: 1,
-    padding: 15
   },
   description: {
     flex: 5,
     backgroundColor: 'white',
-    padding: 15
   },
   bottom: {
     flex: 3,
