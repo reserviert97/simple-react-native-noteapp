@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Image, StyleSheet, Button, TextInput, Picker} from 'react-native';
+import {View, Image, StyleSheet, Text, TextInput, Picker} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default class EditNote extends Component {
@@ -41,6 +41,7 @@ export default class EditNote extends Component {
         </View>
 
         <View style={styles.bottom}>
+          <Text style={{fontSize: 16, color: 'black'}}>CATEGORY</Text>
           <Picker style={{width: '50%', marginLeft: 20, elevation: 10}}>
             <Picker.Item label="Work" value="key0" />
             <Picker.Item label="Personal" value="key1" />

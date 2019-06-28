@@ -6,7 +6,7 @@ export default class AddNote extends Component {
 
   static navigationOptions = ({navigation}) => {
     return {
-      headerTitle: 'Edit Note',
+      headerTitle: 'Add Note',
       headerRight: (
         <TouchableOpacity onPress={() => navigation.navigate('Dashboard')} style={{padding: 15, marginRight: 10}}>
           <Image style={{width: 25, height: 25}} source={require('../../assets/DrawerIcons/ceklis.png')}/>
