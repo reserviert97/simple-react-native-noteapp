@@ -2,27 +2,49 @@ import React, {Component} from 'react';
 import {View, Image, StyleSheet, Text, TextInput, Picker} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-export default class EditNote extends Component {
+import { connect } from 'react-redux';
+import { editNote } from '../../public/redux/actions/notes';
+
+class EditNote extends Component {
 
   state = {
-    title: this.props.navigation.state.params.item.name,
-    description: this.props.navigation.state.params.item.content
+    id: this.props.navigation.state.params.item.id,
+    title: this.props.navigation.state.params.item.title,
+    content: this.props.navigation.state.params.item.content,
+    categoryId: this.props.navigation.state.params.item.Category.id
   }
 
   static navigationOptions = ({navigation}) => {
     return {
-      headerTitle: 'Edit Note',
-      headerRight: (
-        <TouchableOpacity onPress={() => navigation.navigate('Dashboard')} style={{padding: 15, marginRight: 10}}>
-          <Image style={{width: 25, height: 25}} source={require('../../assets/DrawerIcons/ceklis.png')}/>
-        </TouchableOpacity>
-      ),
+      header: null,
     }
+  }
+
+  sendEditedNote(){
+    this.props.dispatch(editNote(this.state));
+    this.props.navigation.navigate('Dashboard');
   }
 
   render() {
     return (
       <View style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.headerPicture} onPress={() => this.props.navigation.goBack()}>
+            <Image style={{width: 24, height: 24}} source={require('../../assets/DrawerIcons/leftArrow.png')}/>
+          </TouchableOpacity>
+
+          <View style={{flex: 4, justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={{fontSize: 20, fontWeight: 'bold'}}>Edit Note</Text>
+          </View>
+
+          <TouchableOpacity 
+            style={styles.headerButton} 
+            onPress={() => this.sendEditedNote()}
+          >
+            <Image style={{width: 22, height: 22}} source={require('../../assets/DrawerIcons/ceklis.png')}/>
+          </TouchableOpacity>
+        </View>
+
         <View style={styles.textInput}>
           <TextInput
             style={{fontSize: 20, color: 'black'}}
@@ -35,18 +57,24 @@ export default class EditNote extends Component {
           <TextInput
             style={{fontSize: 20, color: 'black'}}
             multiline={true}
-            value={this.state.description}
-            onChangeText={(text) => this.setState({description: text})}
+            value={this.state.content}
+            onChangeText={(text) => this.setState({content: text})}
           />
         </View>
 
         <View style={styles.bottom}>
           <Text style={{fontSize: 16, color: 'black', fontWeight: 'bold'}}>CATEGORY</Text>
-          <Picker style={{width: '50%', marginLeft: 20, elevation: 10}}>
-            <Picker.Item label="Work" value="key0" />
-            <Picker.Item label="Personal" value="key1" />
-            <Picker.Item label="Wishlist" value="key2" />
-            <Picker.Item label="Creator" value="key3" />
+          <Picker 
+            style={{width: '50%', marginLeft: 20, elevation: 10}} 
+            selectedValue={this.state.categoryId}
+            onValueChange={(value, index) => {
+              this.setState({categoryId: value})
+            }}
+          >
+            <Picker.Item label="Select Value" value="default"/>
+            {this.props.categories.map((item, key) =>
+              (<Picker.Item label={item.name} value={item.id} key={key} />)
+            )}
           </Picker>
         </View>
       </View>
@@ -54,23 +82,59 @@ export default class EditNote extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+      categories: state.categories.categories
+  }
+}
+
+export default connect(mapStateToProps)(EditNote);
+
 const styles = StyleSheet.create({
   container: {
+    padding: 0,
     flex: 1,
-    paddingRight: 15,
-    paddingLeft: 15
+    backgroundColor: '#FFFFFF'
   },
   textInput: {
-    flex: 1,
+    paddingTop: 20,
+    marginLeft: 10,
+    marginRight: 10,
+    // flex: 1,
+    height: '25%'
   },
   description: {
-    flex: 5,
+    // flex: 5,
+    marginLeft: 10,
+    marginRight: 10,
+    height: '40%',
     backgroundColor: 'white',
   },
   bottom: {
-    flex: 3,
+    // flex: 3,
+    height: '35%',
     backgroundColor: 'white',
-    alignItems: 'flex-start'
-  }
+    alignItems: 'flex-start',
+    padding: 15
+  },
+  header: { 
+    height: 55, 
+    flexDirection: 'row', 
+    elevation: 6, 
+    width: '100%', 
+    paddingLeft: 15,
+    paddingRight: 15, 
+    backgroundColor: 'white'
+  },
+  headerPicture: {
+    flex: 1, 
+    justifyContent: 'center', 
+    alignItems: 'center'
+  },
+  headerButton: {
+    flex:1, 
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
 
 });

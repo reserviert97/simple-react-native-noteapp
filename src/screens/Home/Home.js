@@ -1,59 +1,82 @@
 import React, { Component } from 'react';
 import {View, Text, TouchableOpacity, Image, StyleSheet, TextInput} from 'react-native';
-import {createDrawerNavigator, createStackNavigator} from 'react-navigation';
 
-import AddNote from '../AddNote/AddNote';
-import EditNote from '../EditNote/EditNote';
-import CustomDrawer from '../../components/customDrawer';
 import NoteList from '../../components/Home/NoteList';
 import Header from '../../components/Home/Header';
 import SortModal from '../../components/Home/SortModal';
+import DeleteModal from '../../components/Home/DeleteModal';
+
+import { connect } from 'react-redux';
+import { getNotes, searchNotes, deleteNote } from '../../public/redux/actions/notes';
+import { getCategories } from '../../public/redux/actions/categories';
 class Home extends Component {
   state = {
     modalVisible: false,
+    search: '',
+    searchActive: false,
+    deleteModal: false,
+    selectedItem: 0,
   };
 
   static navigationOptions = ({navigation}) => ({
     header: null
   });
 
+  searchData = (keyword) => {
+    this.props.dispatch(searchNotes(keyword));
+  }
+
+  fetchData = () => {
+    this.props.dispatch(getNotes());
+    this.props.dispatch(getCategories());
+  }
+
+  componentWillMount(){
+    this.fetchData();
+  }
+
   setModalVisible(visible) {
     this.setState({modalVisible: visible});
   }
+
+  deleteItem() {
+    this.props.dispatch(deleteNote(this.state.selectedItem));
+    this.setDeleteModal(!this.state.deleteModal)
+  }
   
+  setDeleteModal(visible) {
+    this.setState({deleteModal: visible})
+  }
+
   render(){
-    const items = [
-      { name: 'Create something', category: 'Personal', date: '25 June', content: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec', key: Math.random() + "A" }, 
-      { name: 'Build a React Native apps', category: 'Work', date: '22 Mei', content: 'lorem ipsum sesuatu bla bla bla bla bla asdsad asdsad asdasdasdasda asdasdasdasd asdsa', key: Math.random() + "A"  },
-      { name: 'Doing something,', category: 'Wishlist', date: '09 Maret', content: 'aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate ele', key: Math.random() + "A"  }, 
-      { name: 'Going arround', category: 'Wishlist', date: '05 May', content: 'lorem ipsum sesuatu bla bla bla bla bla', key: Math.random() + "A"  },
-      { name: 'Build a Flutter', category: 'Learn', date: '19 January', content: 'dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi', key: Math.random() + "A"  }, 
-      { name: 'Cannot get a Data', category: 'Learn', date: '20 February', content: 'aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean', key: Math.random() + "A"  },
-      { name: 'Doing a great app', category: 'Personal', date: '14 February', content: 'aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean', key: Math.random() + "A"  },
-      { name: 'Bla Bla Bla', category: 'Work', date: '18 Mei', content: 'lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt.', key: Math.random() + "A"  },
-      { name: 'Wow, amazing', category: 'Personal', date: '29 September', content: 'lorem ipsum sesuatu bla bla bla bla bla', key: Math.random() + "A"  },
-      { name: 'My Today List', category: 'Wishlist', date: '19 November', content: 'Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nun', key: Math.random() + "A"  },
-    ];
+    const { navigation } = this.props;
 
     return (
       <View style={styles.container}>
         <Header 
-          openDrawer={() => this.props.navigation.toggleDrawer()} 
+          openDrawer={() => navigation.toggleDrawer()} 
           openModal={() => this.setModalVisible(true)}
         />
 
         <View style={styles.searchContainer}>
-          <TextInput style={styles.search} placeholder="search.."/>
+          <TextInput 
+            style={styles.search} 
+            placeholder="search.." 
+            onChangeText={(text) => this.searchData(text)}/>
         </View>
 
         <NoteList 
-          data={items} 
-          navigateEditNote={(data) => this.props.navigation.navigate('EditNote', data)} 
+          data={this.props.notes} 
+          navigateEditNote={(data) => navigation.navigate('EditNote', data)} 
+          deleteNote={(id) => {
+            this.setDeleteModal(true)
+            this.setState({selectedItem: id})
+          }}
         />
 
         <TouchableOpacity 
           activeOpacity={1} 
-          onPress={() => this.props.navigation.navigate('AddNote')} 
+          onPress={() => navigation.navigate('AddNote')} 
           style={styles.floatingButtonStyle}>
             <Text style={{fontSize: 20, fontWeight: 'bold'}}>+</Text>
         </TouchableOpacity>
@@ -63,11 +86,25 @@ class Home extends Component {
           visibility={this.state.modalVisible}
         />
 
+        <DeleteModal 
+          visible={this.state.deleteModal} 
+          closeModal={() => {this.setDeleteModal(!this.state.deleteModal)}}
+          deleteItem={() => this.deleteItem()}
+        />
+
       </View>
     )
   }
 };
 
+const mapStateToProps = state => {
+  return {
+      notes: state.notes.notes,
+      categories: state.categories.categories
+  }
+}
+
+export default connect(mapStateToProps)(Home);
 
 const styles = StyleSheet.create({
   container: {
@@ -77,7 +114,8 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     alignItems: 'center',
-    marginTop: 15
+    marginTop: 10,
+    marginBottom: 10
   },
   search: {
     paddingLeft: 15,
@@ -105,60 +143,4 @@ const styles = StyleSheet.create({
   }
 });
 
-const HomeStack = createStackNavigator({
-  Dashboard: {
-    screen: Home,
-    header: () => null
-  },
-  AddNote: {
-    screen: AddNote,
-  },
-  EditNote: {
-    screen: EditNote
-  }
-});
-
-const AppDrawerNavigator = createDrawerNavigator({
-  Personal: {
-    screen: HomeStack,
-    navigationOptions: ({navigation}) => {
-      return {
-        drawerIcon: (
-          <Image 
-            source={require('../../assets/DrawerIcons/writing.png')} 
-            style={{width: 20, height: 20}} />
-        )
-      }
-    }
-  },
-  Work: {
-    screen: HomeStack,
-    navigationOptions: ({navigation}) => {
-      return {
-        drawerIcon: (
-          <Image 
-            source={require('../../assets/DrawerIcons/portfolio.png')} 
-            style={{width: 20, height: 20}} />
-        )
-      }
-    }
-  },
-  Wishlist: {
-    screen: HomeStack,
-    navigationOptions: ({navigation}) => {
-      return {
-        drawerIcon: (
-          <Image 
-            source={require('../../assets/DrawerIcons/wishlist.png')} 
-            style={{width: 20, height: 20}}
-          />
-        )
-      }
-    }
-  }
-}, {
-  contentComponent: CustomDrawer
-});
-
-export default AppDrawerNavigator;
 
