@@ -62,7 +62,8 @@ class Home extends Component {
           <TextInput 
             style={styles.search} 
             placeholder="search.." 
-            onChangeText={(text) => this.searchData(text)}/>
+            onChangeText={(text) => this.searchData(text)}
+          />
         </View>
 
         <NoteList 
