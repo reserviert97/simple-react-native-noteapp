@@ -7,7 +7,7 @@ import SortModal from '../../components/Home/SortModal';
 import DeleteModal from '../../components/Home/DeleteModal';
 
 import { connect } from 'react-redux';
-import { getNotes, searchNotes, deleteNote } from '../../public/redux/actions/notes';
+import { getNotes, searchNotes, deleteNote, sortNote, getNotesPerPage } from '../../public/redux/actions/notes';
 import { getCategories } from '../../public/redux/actions/categories';
 class Home extends Component {
   state = {
@@ -16,6 +16,8 @@ class Home extends Component {
     searchActive: false,
     deleteModal: false,
     selectedItem: 0,
+    refreshing: false,
+    page:1 
   };
 
   static navigationOptions = ({navigation}) => ({
@@ -26,12 +28,12 @@ class Home extends Component {
     this.props.dispatch(searchNotes(keyword));
   }
 
-  fetchData = () => {
+  fetchData = async () => {
     this.props.dispatch(getNotes());
     this.props.dispatch(getCategories());
   }
 
-  componentWillMount(){
+  componentDidMount(){
     this.fetchData();
   }
 
@@ -46,6 +48,28 @@ class Home extends Component {
   
   setDeleteModal(visible) {
     this.setState({deleteModal: visible})
+  }
+
+  onRefresh = () => {
+    this.setState({refreshing: true});
+    this.fetchData();
+    this.setState({refreshing: false});
+  }
+
+  sort(type) {
+    this.props.dispatch(sortNote(type))
+    this.setModalVisible(!this.state.modalVisible)
+  }
+
+  getMore = (page) => {
+    if (page <= 3) {
+      this.props.dispatch(getNotesPerPage(page));
+    }
+  }
+  
+  loadMoreHandler = () => {
+    this.setState({page: (this.state.page + 1)});
+    this.getMore(this.state.page+1);
   }
 
   render(){
@@ -68,11 +92,14 @@ class Home extends Component {
 
         <NoteList 
           data={this.props.notes} 
-          navigateEditNote={(data) => navigation.navigate('EditNote', data)} 
+          navigateEditNote={(data) => navigation.navigate('EditNote', data)}
+          refreshing={this.state.refreshing}
+          onRefresh={this.onRefresh}
           deleteNote={(id) => {
             this.setDeleteModal(true)
             this.setState({selectedItem: id})
           }}
+          onEndReached={this.loadMoreHandler}
         />
 
         <TouchableOpacity 
@@ -85,6 +112,7 @@ class Home extends Component {
         <SortModal 
           closeModal={() => { this.setModalVisible(!this.state.modalVisible) }}
           visibility={this.state.modalVisible}
+          sort={(type) => this.sort(type)}
         />
 
         <DeleteModal 
@@ -94,13 +122,14 @@ class Home extends Component {
         />
 
       </View>
-    )
-  }
+    );
+  };
 };
 
 const mapStateToProps = state => {
   return {
-      notes: state.notes.notes,
+      notes: state.notes.data,
+      totalPage: state.notes.totalPage,
       categories: state.categories.categories
   }
 }

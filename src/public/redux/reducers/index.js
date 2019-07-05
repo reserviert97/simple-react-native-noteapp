@@ -5,8 +5,8 @@ import categories from './categories';
 
 // combine item
 const appReducer = combineReducers({
-  notes: notes,
-  categories: categories
+  notes,
+  categories
 });
 
 export default appReducer;

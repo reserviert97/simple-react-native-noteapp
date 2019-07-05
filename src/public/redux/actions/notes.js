@@ -1,9 +1,17 @@
 import axios from 'axios';
 
+
 export const getNotes = () => {
   return {
     type: 'GET_NOTES',
     payload: axios.get('http://192.168.100.51:3000/notes')
+  }
+}
+
+export const getNotesPerPage = (page) => {
+  return {
+    type: 'GET_NOTES_PERPAGE',
+    payload: axios.get('http://192.168.100.51:3000/notes?page='+page)
   }
 }
 
@@ -40,5 +48,12 @@ export const deleteNote = (id) => {
   return {
     type: 'DELETE_NOTES',
     payload: axios.delete('http://192.168.100.51:3000/notes/'+id)
+  }
+}
+
+export const sortNote = (sort) => {
+  return {
+    type: 'SORT_NOTES',
+    payload: axios.get('http://192.168.100.51:3000/notes?sort='+sort)
   }
 }

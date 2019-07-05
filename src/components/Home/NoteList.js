@@ -1,15 +1,30 @@
 import React, {Component} from 'react';
-import { StyleSheet, FlatList, View, TouchableOpacity, Text, ScrollView } from 'react-native';
+import { StyleSheet, FlatList, View, TouchableOpacity, Text, ScrollView , RefreshControl} from 'react-native';
 import moment from 'moment';
 
 const NoteList = (props) => {
     return(
-      <ScrollView>
+      // <ScrollView
+      //   refreshControl={
+      //     <RefreshControl 
+      //       refreshing={props.refreshing}
+      //       onRefresh={props.onRefresh}
+      //     />
+      //   }
+      // >
         <View style={styles.bottom}>
           <FlatList
+            refreshControl={
+              <RefreshControl 
+                refreshing={props.refreshing}
+                onRefresh={props.onRefresh}
+              />
+            }
             data={props.data}
             numColumns={2}
-            keyExtractor={(item, index) => item.id}
+            keyExtractor={(item, index) => item.id.toString()}
+            onEndReached={props.onEndReached}
+            onEndReachedThreshold={0.1}
             renderItem={(data) => (
               <TouchableOpacity activeOpacity={0.9} style={styles.bottomItem} onPress={() => props.navigateEditNote(data)} onLongPress={() => props.deleteNote(data.item.id)}>
                 <View style={{flex: 1, borderRadius: 10, elevation: 10, padding: 10, backgroundColor: (data.item.Category.name == 'Unbranded') ? '#C0EB6A' : 
@@ -27,10 +42,10 @@ const NoteList = (props) => {
                 </View>
               </TouchableOpacity>
             )}
-            // keyExtractor={}
+            
           />
         </View>
-      </ScrollView>
+      // </ScrollView>
     )
 }
 
@@ -40,6 +55,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     padding: 10,
+    flex: 1
   },
   bottomItem: {
     width: '50%',

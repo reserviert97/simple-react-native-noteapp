@@ -11,8 +11,12 @@ const SortModal = (props) => {
           style={styles.modalCloseWrapper} 
           onPress={props.closeModal}>
             <View style={styles.modalWrapper}>
-              <Text style={{fontSize: 15, marginBottom: 5}}>ASCENDING</Text>
-              <Text style={{fontSize: 15}}>DESCENDING</Text>
+              <TouchableOpacity onPress={() => props.sort('asc')}>
+                <Text style={{fontSize: 15, marginBottom: 5}}>ASCENDING</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => props.sort('desc')}>
+                <Text style={{fontSize: 15}}>DESCENDING</Text>
+              </TouchableOpacity>
             </View>
         </TouchableOpacity>
     </Modal>

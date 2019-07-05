@@ -1,5 +1,6 @@
 const initialState = {
-  notes: [],
+  data: [],
+  totalPage: 0,
   isLoading: false,
   isError: false
 }
@@ -19,27 +20,40 @@ export default notes = (state = initialState, action) => {
     case 'GET_NOTES_FULFILLED' :  // in case successfully get data
       return {
         ...state,
-        notes: action.payload.data.arkanotes.result
+        data: action.payload.data.arkanotes.result,
+        totalPage: action.payload.data.arkanotes.query.totalPage,
+        isLoading: false
+      }
+    case 'GET_NOTES_PERPAGE_FULFILLED' :  // in case successfully get data
+      return {
+        ...state,
+        data: state.data.concat(action.payload.data.arkanotes.result),
+        totalPage: action.payload.data.arkanotes.query.totalPage
       }
     case 'SEARCH_NOTES_FULFILLED' :
       return {
         ...state,
-        notes: action.payload.data.arkanotes.result
+        data: action.payload.data.arkanotes.result
+      }
+    case 'SORT_NOTES_FULFILLED' :
+      return {
+        ...state,
+        data: action.payload.data.arkanotes.result
       }
     case 'POST_NOTES_FULFILLED' :
       return {
         ...state,
-        notes: [action.payload.data.arkanotes.data].concat(state.notes)
+        data: [action.payload.data.arkanotes.data].concat(state.data)
       }
     case 'DELETE_NOTES_FULFILLED' :
       return {
         ...state,
-        notes: state.notes.filter(note => note.id !== action.payload.data.arkanotes.data.id)
+        data: state.data.filter(note => note.id !== action.payload.data.arkanotes.data.id)
       }
     case 'PATCH_NOTES_FULFILLED' :
       return {
         ...state,
-        notes: state.notes.map(note => 
+        data: state.data.map(note => 
                 (note.id == action.payload.data.arkanotes.data.id) ? 
                 action.payload.data.arkanotes.data : note
         )
