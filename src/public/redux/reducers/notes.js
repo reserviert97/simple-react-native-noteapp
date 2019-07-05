@@ -1,6 +1,7 @@
 const initialState = {
   data: [],
   totalPage: 0,
+  isCategory: false,
   isLoading: false,
   isError: false
 }
@@ -33,7 +34,8 @@ export default notes = (state = initialState, action) => {
     case 'SEARCH_NOTES_FULFILLED' :
       return {
         ...state,
-        data: action.payload.data.arkanotes.result
+        data: action.payload.data.arkanotes.result,
+        isSearching: true
       }
     case 'SORT_NOTES_FULFILLED' :
       return {
@@ -57,6 +59,14 @@ export default notes = (state = initialState, action) => {
                 (note.id == action.payload.data.arkanotes.data.id) ? 
                 action.payload.data.arkanotes.data : note
         )
+      }
+    case 'GET_NOTES_BY_CATEGORY_FULFILLED' :  // in case successfully get data
+      return {
+        ...state,
+        data: action.payload.data.arkanotes.result,
+        totalPage: action.payload.data.arkanotes.query.totalPage,
+        isLoading: false,
+        isCategory: true,
       }
     
     default:

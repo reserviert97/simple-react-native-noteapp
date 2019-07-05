@@ -57,3 +57,10 @@ export const sortNote = (sort) => {
     payload: axios.get('http://192.168.100.51:3000/notes?sort='+sort)
   }
 }
+
+export const getNotesByCategory = (id) => {
+  return {
+    type: 'GET_NOTES_BY_CATEGORY',
+    payload: axios.get('http://192.168.100.51:3000/notes?category='+id)
+  }
+}

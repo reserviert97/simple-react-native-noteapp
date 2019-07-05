@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import {View, Text, TouchableOpacity, Image, StyleSheet, TextInput} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, TextInput} from 'react-native';
+import debounce from 'lodash.debounce';
 
 import NoteList from '../../components/Home/NoteList';
 import Header from '../../components/Home/Header';
@@ -17,7 +18,9 @@ class Home extends Component {
     deleteModal: false,
     selectedItem: 0,
     refreshing: false,
-    page:1 
+    page:1,
+    categoryId: '',
+    treshold: 0  
   };
 
   static navigationOptions = ({navigation}) => ({
@@ -52,6 +55,7 @@ class Home extends Component {
 
   onRefresh = () => {
     this.setState({refreshing: true});
+    this.setState({page: 1});
     this.fetchData();
     this.setState({refreshing: false});
   }
@@ -62,7 +66,7 @@ class Home extends Component {
   }
 
   getMore = (page) => {
-    if (page <= 3) {
+    if (page <= 3 && !this.props.isCategory && !this.props.isSearching) {
       this.props.dispatch(getNotesPerPage(page));
     }
   }
@@ -86,7 +90,7 @@ class Home extends Component {
           <TextInput 
             style={styles.search} 
             placeholder="search.." 
-            onChangeText={(text) => this.searchData(text)}
+            onChangeText={debounce(this.searchData, 500) }
           />
         </View>
 
@@ -100,6 +104,7 @@ class Home extends Component {
             this.setState({selectedItem: id})
           }}
           onEndReached={this.loadMoreHandler}
+          treshold={this.state.treshold}
         />
 
         <TouchableOpacity 
@@ -130,7 +135,9 @@ const mapStateToProps = state => {
   return {
       notes: state.notes.data,
       totalPage: state.notes.totalPage,
-      categories: state.categories.categories
+      categories: state.categories.categories,
+      isCategory: state.notes.isCategory,
+      isSearching: state.notes.isSearching
   }
 }
 

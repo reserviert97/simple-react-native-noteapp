@@ -11,7 +11,7 @@ class EditNote extends Component {
     id: this.props.navigation.state.params.item.id,
     title: this.props.navigation.state.params.item.title,
     content: this.props.navigation.state.params.item.content,
-    categoryId: this.props.navigation.state.params.item.Category.id
+    categoryId: this.props.navigation.state.params.item.Category !== null ? this.props.navigation.state.params.item.Category.id : 0
   }
 
   static navigationOptions = ({navigation}) => {
