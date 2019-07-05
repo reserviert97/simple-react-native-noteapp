@@ -22,6 +22,11 @@ export default categories = (state = initialState, action) => {
         ...state,
         categories: state.categories.concat(action.payload.data.arkanotes.data)
       }
+    case 'DELETE_CATEGORIES_FULFILLED' :
+      return {
+        ...state,
+        categories: state.categories.filter(category => category.id !== action.payload.data.arkanotes.data.id)
+      }
     default:
       return state
   } 

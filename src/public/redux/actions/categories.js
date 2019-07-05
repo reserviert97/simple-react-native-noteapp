@@ -7,11 +7,19 @@ export const getCategories = () => {
   }
 }
 
-export const addCategories = (data) => {
+export const addCategories = ({categoryName, icon}) => {
   return {
     type: 'POST_CATEGORIES',
     payload: axios.post('http://192.168.100.51:3000/category', {
-      name: data 
+      name: categoryName,
+      icon: icon 
     })
+  }
+}
+
+export const deleteCategories = (id) => {
+  return {
+    type: 'DELETE_CATEGORIES',
+    payload: axios.delete('http://192.168.100.51:3000/category/'+id)
   }
 }
