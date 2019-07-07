@@ -81,6 +81,8 @@ or in case you want to run the demo from this app, you can install app-release.a
 
 *  [React-Navigation](https://reactnavigation.org/) - Navigation for the app
 
+*  [Redux](https://redux.js.org/) - State Management
+
   in case you want to use the backend, you can visit [this repo](https://github.com/reserviert97/arkaNotes)
   
   
@@ -92,14 +94,18 @@ or in case you want to run the demo from this app, you can install app-release.a
 *  **Nurlatif Ardhi Pratama** - [Facebook](https://www.facebook.com/reserviert97)
 
   
-  ## Showcase
+  ## App Showcase
   
   ### Screenshoot
+  <p align='center'>
+    <span>
+    <img src='https://raw.githubusercontent.com/reserviert97/simple-react-native-noteapp/master/src/assets/screenshots/addnote.jpg' width=200 />
+    <img src='https://raw.githubusercontent.com/reserviert97/simple-react-native-noteapp/master/src/assets/screenshots/drawer.jpg' width=200 />
+    <img src='https://raw.githubusercontent.com/reserviert97/simple-react-native-noteapp/master/src/assets/screenshots/home.jpg' width=200 />
+    <img src='https://raw.githubusercontent.com/reserviert97/simple-react-native-noteapp/master/src/assets/screenshots/search.jpg' width=200 />
+    </span>
+  </p>
 
-![add Note](https://raw.githubusercontent.com/reserviert97/simple-react-native-noteapp/master/src/assets/screenshots/addnote.jpg)
-![drawer](https://raw.githubusercontent.com/reserviert97/simple-react-native-noteapp/master/src/assets/screenshots/drawer.jpg)
-![home](https://raw.githubusercontent.com/reserviert97/simple-react-native-noteapp/master/src/assets/screenshots/home.jpg)
-![search](https://raw.githubusercontent.com/reserviert97/simple-react-native-noteapp/master/src/assets/screenshots/search.jpg)
 
   [Youtube Video](https://youtu.be/qTf4RbjZBJM)
   
