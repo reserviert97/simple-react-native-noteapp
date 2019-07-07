@@ -96,8 +96,10 @@ or in case you want to run the demo from this app, you can install app-release.a
   
   ### Screenshoot
 
-![Home](https://octodex.github.com/images/minion.png)
-![Home](https://octodex.github.com/images/minion.png)
+![add Note](https://raw.githubusercontent.com/reserviert97/simple-react-native-noteapp/master/src/assets/screenshots/addnote.jpg)
+![drawer](https://raw.githubusercontent.com/reserviert97/simple-react-native-noteapp/master/src/assets/screenshots/drawer.jpg)
+![home](https://raw.githubusercontent.com/reserviert97/simple-react-native-noteapp/master/src/assets/screenshots/home.jpg)
+![search](https://raw.githubusercontent.com/reserviert97/simple-react-native-noteapp/master/src/assets/screenshots/search.jpg)
 
   [Youtube Video](https://youtu.be/qTf4RbjZBJM)
   
